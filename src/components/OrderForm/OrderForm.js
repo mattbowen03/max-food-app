@@ -12,20 +12,36 @@ export const OrderForm = (props) => {
 
   const orderForm = (
     <form>
-      <label htmlFor='firstName'> First Name</label>
-      <input id='firstName' type='text' />
-      <label htmlFor='lastName'> Last Name</label>
-      <input id='lastName' type='text' />
-      <label htmlFor='email'> Email</label>
-      <input id='email' type='email' />
-      <label htmlFor='street'> Street</label>
-      <input id='street' type='street' />
-      <label htmlFor='city'> city</label>
-      <input id='city' type='city' />
-      <label htmlFor='zip'> zip</label>
-      <input id='zip' type='zip' />
-      <label htmlFor='state'> State</label>
-      <input id='state' type='state' />
+      <div className={classes["control-group"]}>
+        <div className={classes["form-control"]}>
+          <label htmlFor='firstName'> First Name</label>
+          <input id='firstName' type='text' />
+        </div>
+        <div className={classes["form-control"]}>
+          <label htmlFor='lastName'> Last Name</label>
+          <input id='lastName' type='text' />
+        </div>
+        <div className={classes["form-control"]}>
+          <label htmlFor='email'> Email</label>
+          <input id='email' type='email' />
+        </div>
+        <div className={classes["form-control"]}>
+          <label htmlFor='street'> Street</label>
+          <input id='street' type='street' />
+        </div>
+        <div className={classes["form-control"]}>
+          <label htmlFor='city'> city</label>
+          <input id='city' type='city' />
+        </div>
+        <div className={classes["form-control"]}>
+          <label htmlFor='zip'> zip</label>
+          <input id='zip' type='zip' />
+        </div>
+        <div className={classes["form-control"]}>
+          <label htmlFor='state'> State</label>
+          <input id='state' type='state' />
+        </div>
+      </div>
     </form>
   );
 
@@ -37,8 +53,10 @@ export const OrderForm = (props) => {
         <span>{totalAmount}</span>
       </div>
       <div className={classes.actions}>
-        <button className={classes["button--alt"]} onClick={props.onClose}>
-          Close
+        <button
+          className={classes["button--alt"]}
+          onClick={props.onReturnToCart}>
+          Cart
         </button>
         <button className={classes.button}>Place Order</button>
       </div>

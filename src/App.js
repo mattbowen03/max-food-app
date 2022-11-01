@@ -26,12 +26,22 @@ function App() {
     setOrderFormIsShown(false);
   };
 
+  const returnToCartHandler = () => {
+    setOrderFormIsShown(false);
+    setCartIsShown(true);
+  };
+
   return (
     <CartProvider>
       {cartIsShown && (
         <Cart onClose={hideCartHandler} onOrder={showOrderFormHandler} />
       )}
-      {orderFormIsShown && <OrderForm onClose={hideOrderFormHandler} />}
+      {orderFormIsShown && (
+        <OrderForm
+          onClose={hideOrderFormHandler}
+          onReturnToCart={returnToCartHandler}
+        />
+      )}
       <Header onShowCart={showCartHandler} />
       <main>
         <Meals />

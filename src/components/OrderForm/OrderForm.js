@@ -1,14 +1,17 @@
 import classes from "./Order-Form.module.css";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import React from "react";
 import Modal from "../UI/Modal";
 import CartContext from "../../store/cart-context";
-import useInput from "../hooks/use-input";
+import useInput from "../../hooks/use-input";
 
 const isNotEmpty = (value) => value.trim() !== "";
 const isEmail = (value) => value.includes("@");
 
 export const OrderForm = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const {
     value: firstNameValue,
     isValid: firstNameIsValid,
@@ -39,24 +42,61 @@ export const OrderForm = (props) => {
   const cartCtx = useContext(CartContext);
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
 
+  console.log(cartCtx);
+
   let formIsValid = false;
 
   if (firstNameIsValid) {
     formIsValid = true;
   }
 
+  const postData = async (order) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        "https://react-http-fd1aa-default-rtdb.firebaseio.com/orders.json",
+        {
+          method: "POST",
+          body: JSON.stringify(order),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      setError(error.message);
+      console.log("Something went wrong!");
+    }
+    setIsLoading(false);
+  };
+
   const submitHandler = (event) => {
     event.preventDefault();
     if (!formIsValid) {
       return;
     }
-    console.log(firstNameValue);
-    console.log(lastNameValue);
-    console.log(emailValue);
+
+    const order = {
+      items: cartCtx.items,
+      totalAmount: cartCtx.totalAmount,
+      firstName: firstNameValue,
+      lastName: lastNameValue,
+      email: emailValue,
+    };
+
+    postData(order);
+    cartCtx.resetCart();
+
     resetFirstName();
     resetLastName();
     resetEmail();
-    // props.onClose();
+    props.onClose();
   };
 
   const firstNameClasses = firstNameHasError

@@ -39,6 +39,7 @@ const AvailableMeals = () => {
         }
         setMealList(loadedMeals);
       } catch (error) {
+        setIsLoading(false);
         setError(error.message);
         console.log("Something went wrong!");
       }

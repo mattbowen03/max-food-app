@@ -6,11 +6,13 @@ import CartContext from "../../store/cart-context";
 import useInput from "../../hooks/use-input";
 
 const isNotEmpty = (value) => value.trim() !== "";
+const validZip = (value) => value.trim().length === 5;
 const isEmail = (value) => value.includes("@");
 
 export const OrderForm = (props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [httpError, setHttpError] = useState(null);
+  const [didSubmit, setDidSubmit] = useState(false);
 
   const {
     value: firstNameValue,
@@ -39,6 +41,33 @@ export const OrderForm = (props) => {
     reset: resetEmail,
   } = useInput(isEmail);
 
+  const {
+    value: streetValue,
+    isValid: streetIsValid,
+    hasError: streetHasError,
+    valueChangeHandler: streetChangeHandler,
+    inputBlurHandler: streetBlurHandler,
+    reset: resetStreet,
+  } = useInput(isNotEmpty);
+
+  const {
+    value: cityValue,
+    isValid: cityIsValid,
+    hasError: cityHasError,
+    valueChangeHandler: cityChangeHandler,
+    inputBlurHandler: cityBlurHandler,
+    reset: resetCity,
+  } = useInput(isNotEmpty);
+
+  const {
+    value: zipValue,
+    isValid: zipIsValid,
+    hasError: zipHasError,
+    valueChangeHandler: zipChangeHandler,
+    inputBlurHandler: zipBlurHandler,
+    reset: resetZip,
+  } = useInput(validZip);
+
   const cartCtx = useContext(CartContext);
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
 
@@ -46,13 +75,20 @@ export const OrderForm = (props) => {
 
   let formIsValid = false;
 
-  if (firstNameIsValid) {
+  if (
+    firstNameIsValid &&
+    lastNameIsValid &&
+    emailIsValid &&
+    streetIsValid &&
+    cityIsValid &&
+    zipIsValid
+  ) {
     formIsValid = true;
   }
 
   const postData = async (order) => {
     setIsLoading(true);
-    setError(null);
+    setHttpError(null);
     try {
       const response = await fetch(
         "https://react-http-fd1aa-default-rtdb.firebaseio.com/orders.json",
@@ -65,14 +101,22 @@ export const OrderForm = (props) => {
         }
       );
       if (!response.ok) {
-        throw new Error("Something went wrong!");
+        throw new Error("Uh oh!");
       }
-      const data = await response.json();
-      console.log(data);
+      cartCtx.resetCart();
+
+      resetFirstName();
+      resetLastName();
+      resetEmail();
+      resetCity();
+      resetStreet();
+      resetZip();
+      setDidSubmit(true);
     } catch (error) {
-      setError(error.message);
+      setHttpError(error.message);
       console.log("Something went wrong!");
     }
+
     setIsLoading(false);
   };
 
@@ -91,12 +135,6 @@ export const OrderForm = (props) => {
     };
 
     postData(order);
-    cartCtx.resetCart();
-
-    resetFirstName();
-    resetLastName();
-    resetEmail();
-    props.onClose();
   };
 
   const firstNameClasses = firstNameHasError
@@ -110,6 +148,34 @@ export const OrderForm = (props) => {
   const emailClasses = emailHasError
     ? `${classes["form-control"]} ${classes["invalid"]}`
     : classes["form-control"];
+
+  const streetClasses = streetHasError
+    ? `${classes["form-control"]} ${classes["invalid"]}`
+    : classes["form-control"];
+
+  const cityClasses = cityHasError
+    ? `${classes["form-control"]} ${classes["invalid"]}`
+    : classes["form-control"];
+
+  const zipClasses = zipHasError
+    ? `${classes["form-control"]} ${classes["invalid"]}`
+    : classes["form-control"];
+
+  if (didSubmit) {
+    return (
+      <Modal onClose={props.onClose}>
+        <p>Sucess! Thank you for choosing us!</p>
+        <div className={classes.actions}>
+          <button
+            type='button'
+            onClick={props.onClose}
+            className={classes.button}>
+            Close
+          </button>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal onClose={props.onClose}>
@@ -158,6 +224,49 @@ export const OrderForm = (props) => {
               </p>
             )}
           </div>
+          <div className={streetClasses}>
+            <label htmlFor='street'> Street</label>
+            <input
+              value={streetValue}
+              onChange={streetChangeHandler}
+              onBlur={streetBlurHandler}
+              id='street'
+              type='street'
+            />
+            {streetHasError && (
+              <p className={classes["error-text"]}>
+                Please enter a street address.
+              </p>
+            )}
+          </div>
+          <div className={cityClasses}>
+            <label htmlFor='city'> City</label>
+            <input
+              value={cityValue}
+              onChange={cityChangeHandler}
+              onBlur={cityBlurHandler}
+              id='city'
+              type='city'
+            />
+            {cityHasError && (
+              <p className={classes["error-text"]}>Please enter a city.</p>
+            )}
+          </div>
+          <div className={zipClasses}>
+            <label htmlFor='zip'> Zip</label>
+            <input
+              value={zipValue}
+              onChange={zipChangeHandler}
+              onBlur={zipBlurHandler}
+              id='zip'
+              type='zip'
+            />
+            {zipHasError && (
+              <p className={classes["error-text"]}>
+                Please enter a 5 digit postal code.
+              </p>
+            )}
+          </div>
         </div>
 
         <div className={classes.total}>
@@ -166,6 +275,7 @@ export const OrderForm = (props) => {
         </div>
         <div className={classes.actions}>
           <button
+            type='button'
             className={classes["button--alt"]}
             onClick={props.onReturnToCart}>
             Cart
@@ -177,6 +287,8 @@ export const OrderForm = (props) => {
             Place Order
           </button>
         </div>
+        {isLoading && <p>Submitting...</p>}
+        {httpError && <p>An error has occured. Please try re-submitting.</p>}
       </form>
     </Modal>
   );

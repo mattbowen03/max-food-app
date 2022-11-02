@@ -79,6 +79,7 @@
   display: flex;
   column-gap: 1rem;
   flex-wrap: wrap;
+  border-bottom: 2px solid #8a2b06;
 }
 
 .control-group .form-control {

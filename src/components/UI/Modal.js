@@ -1,5 +1,5 @@
 import classes from "./Modal.module.css";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import {
   disableBodyScroll,
@@ -12,7 +12,7 @@ const Backdrop = (props) => {
 };
 const ModalOverlay = (props) => {
   return (
-    <div ref={props.modalRef} className={classes.modal}>
+    <div className={classes.modal}>
       <div className={classes.content}>{props.children}</div>
     </div>
   );
@@ -21,15 +21,16 @@ const ModalOverlay = (props) => {
 const portalElement = document.getElementById("overlays");
 
 const Modal = (props) => {
-  const modalRef = useRef();
+  const bodyRef = document.body;
+
   useEffect(() => {
-    disableBodyScroll(modalRef);
+    disableBodyScroll(bodyRef);
 
     return () => {
-      enableBodyScroll(modalRef);
+      enableBodyScroll(bodyRef);
       clearAllBodyScrollLocks();
     };
-  }, []);
+  }, [bodyRef]);
   return (
     <>
       {ReactDOM.createPortal(
@@ -37,7 +38,7 @@ const Modal = (props) => {
         portalElement
       )}
       {ReactDOM.createPortal(
-        <ModalOverlay modalRef={modalRef}>{props.children}</ModalOverlay>,
+        <ModalOverlay>{props.children}</ModalOverlay>,
         portalElement
       )}
       {}

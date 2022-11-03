@@ -1,5 +1,5 @@
 import classes from "./Modal.module.css";
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 
 const Backdrop = (props) => {

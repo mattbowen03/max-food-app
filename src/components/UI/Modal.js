@@ -1,13 +1,18 @@
 import classes from "./Modal.module.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
+import {
+  disableBodyScroll,
+  enableBodyScroll,
+  clearAllBodyScrollLocks,
+} from "body-scroll-lock";
 
 const Backdrop = (props) => {
   return <div className={classes.backdrop} onClick={props.onClose}></div>;
 };
 const ModalOverlay = (props) => {
   return (
-    <div className={classes.modal}>
+    <div ref={props.modalRef} className={classes.modal}>
       <div className={classes.content}>{props.children}</div>
     </div>
   );
@@ -16,17 +21,15 @@ const ModalOverlay = (props) => {
 const portalElement = document.getElementById("overlays");
 
 const Modal = (props) => {
+  const modalRef = useRef();
   useEffect(() => {
-    if (typeof window != "undefined" && window.document) {
-      document.body.style.overflow = "hidden";
-      document.body.style["-webkit-overflow-scrolling"] = "touch";
-    }
+    disableBodyScroll(modalRef);
 
     return () => {
-      document.body.style.overflow = "scroll";
+      enableBodyScroll(modalRef);
+      clearAllBodyScrollLocks();
     };
   }, []);
-
   return (
     <>
       {ReactDOM.createPortal(
@@ -34,7 +37,7 @@ const Modal = (props) => {
         portalElement
       )}
       {ReactDOM.createPortal(
-        <ModalOverlay>{props.children}</ModalOverlay>,
+        <ModalOverlay modalRef={modalRef}>{props.children}</ModalOverlay>,
         portalElement
       )}
       {}

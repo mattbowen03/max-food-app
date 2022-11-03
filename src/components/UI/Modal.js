@@ -19,6 +19,7 @@ const Modal = (props) => {
   useEffect(() => {
     if (typeof window != "undefined" && window.document) {
       document.body.style.overflow = "hidden";
+      document.body.style["-webkit-overflow-scrolling"] = "touch";
     }
 
     return () => {

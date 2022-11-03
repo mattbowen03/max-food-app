@@ -139,6 +139,19 @@ button:disabled:active {
   color: #b40e0e;
 }
 
+.actions .invalid-button {
+  background-color: #ccc;
+  color: grey;
+  border-color: lightgray;
+}
+
+.actions .invalid-button:hover,
+.actions .invalid-button:active {
+  background-color: #ccc;
+  color: grey;
+  border-color: lightgray;
+}
+
 @media screen and (max-width: 425px) {
   .form-control input,
   .form-control select {

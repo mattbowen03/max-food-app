@@ -161,6 +161,8 @@ export const OrderForm = (props) => {
     ? `${classes["form-control"]} ${classes["invalid"]}`
     : classes["form-control"];
 
+  const btnClasses = !formIsValid ? classes["invalid-button"] : classes.button;
+
   if (didSubmit) {
     return (
       <Modal onClose={props.onClose}>
@@ -283,10 +285,7 @@ export const OrderForm = (props) => {
               onClick={props.onReturnToCart}>
               Cart
             </button>
-            <button
-              disabled={!formIsValid}
-              type='submit'
-              className={classes.button}>
+            <button type='submit' className={btnClasses}>
               Place Order
             </button>
           </div>

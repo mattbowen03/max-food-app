@@ -13,7 +13,9 @@ const Backdrop = (props) => {
 const ModalOverlay = (props) => {
   return (
     <div className={classes.modal}>
-      <div className={classes.content}>{props.children}</div>
+      <div className={classes.content} body-scroll-lock-ignore>
+        {props.children}
+      </div>
     </div>
   );
 };
@@ -25,7 +27,15 @@ const Modal = (props) => {
 
   useEffect(() => {
     disableBodyScroll(bodyRef, {
-      allowTouchMove: (el) => el.tagName === "FORM",
+      allowTouchMove: (el) => {
+        while (el && el !== document.body) {
+          if (el.getAttribute("body-scroll-lock-ignore") !== null) {
+            return true;
+          }
+
+          el = el.parentElement;
+        }
+      },
     });
 
     return () => {

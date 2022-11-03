@@ -179,117 +179,121 @@ export const OrderForm = (props) => {
 
   return (
     <Modal onClose={props.onClose}>
-      <form onSubmit={submitHandler}>
-        <div className={classes["control-group"]}>
-          <div className={firstNameClasses}>
-            <label htmlFor='firstName'> First Name</label>
-            <input
-              value={firstNameValue}
-              onChange={firstNameChangeHandler}
-              onBlur={firstNameBlurHandler}
-              id='firstName'
-              type='text'
-            />
-            {firstNameHasError && (
-              <p className={classes["error-text"]}>
-                Please enter a first name.
-              </p>
-            )}
+      <div className={classes["order-control"]}>
+        <form onSubmit={submitHandler}>
+          <div className={classes["control-group"]}>
+            <div className={firstNameClasses}>
+              <label htmlFor='firstName'> First Name</label>
+              <input
+                value={firstNameValue}
+                onChange={firstNameChangeHandler}
+                onBlur={firstNameBlurHandler}
+                id='firstName'
+                type='text'
+              />
+              {firstNameHasError && (
+                <p className={classes["error-text"]}>
+                  Please enter a first name.
+                </p>
+              )}
+            </div>
+            <div className={lastNameClasses}>
+              <label htmlFor='lastName'> Last Name</label>
+              <input
+                value={lastNameValue}
+                onChange={lastNameChangeHandler}
+                onBlur={lastNameBlurHandler}
+                id='lastName'
+                type='text'
+              />
+              {lastNameHasError && (
+                <p className={classes["error-text"]}>
+                  Please enter a last name.
+                </p>
+              )}
+            </div>
+            <div className={emailClasses}>
+              <label htmlFor='email'> Email</label>
+              <input
+                value={emailValue}
+                onChange={emailChangeHandler}
+                onBlur={emailBlurHandler}
+                id='email'
+                type='email'
+              />
+              {emailHasError && (
+                <p className={classes["error-text"]}>
+                  Please enter a valid email address.
+                </p>
+              )}
+            </div>
+            <div className={streetClasses}>
+              <label htmlFor='street'> Street</label>
+              <input
+                value={streetValue}
+                onChange={streetChangeHandler}
+                onBlur={streetBlurHandler}
+                id='street'
+                type='street'
+              />
+              {streetHasError && (
+                <p className={classes["error-text"]}>
+                  Please enter a street address.
+                </p>
+              )}
+            </div>
+            <div className={cityClasses}>
+              <label htmlFor='city'> City</label>
+              <input
+                value={cityValue}
+                onChange={cityChangeHandler}
+                onBlur={cityBlurHandler}
+                id='city'
+                type='city'
+              />
+              {cityHasError && (
+                <p className={classes["error-text"]}>Please enter a city.</p>
+              )}
+            </div>
+            <div className={zipClasses}>
+              <label htmlFor='zip'> Zip</label>
+              <input
+                value={zipValue}
+                onChange={zipChangeHandler}
+                onBlur={zipBlurHandler}
+                id='zip'
+                type='zip'
+              />
+              {zipHasError && (
+                <p className={classes["error-text"]}>
+                  Please enter a 5 digit postal code.
+                </p>
+              )}
+            </div>
           </div>
-          <div className={lastNameClasses}>
-            <label htmlFor='lastName'> Last Name</label>
-            <input
-              value={lastNameValue}
-              onChange={lastNameChangeHandler}
-              onBlur={lastNameBlurHandler}
-              id='lastName'
-              type='text'
-            />
-            {lastNameHasError && (
-              <p className={classes["error-text"]}>Please enter a last name.</p>
-            )}
-          </div>
-          <div className={emailClasses}>
-            <label htmlFor='email'> Email</label>
-            <input
-              value={emailValue}
-              onChange={emailChangeHandler}
-              onBlur={emailBlurHandler}
-              id='email'
-              type='email'
-            />
-            {emailHasError && (
-              <p className={classes["error-text"]}>
-                Please enter a valid email address.
-              </p>
-            )}
-          </div>
-          <div className={streetClasses}>
-            <label htmlFor='street'> Street</label>
-            <input
-              value={streetValue}
-              onChange={streetChangeHandler}
-              onBlur={streetBlurHandler}
-              id='street'
-              type='street'
-            />
-            {streetHasError && (
-              <p className={classes["error-text"]}>
-                Please enter a street address.
-              </p>
-            )}
-          </div>
-          <div className={cityClasses}>
-            <label htmlFor='city'> City</label>
-            <input
-              value={cityValue}
-              onChange={cityChangeHandler}
-              onBlur={cityBlurHandler}
-              id='city'
-              type='city'
-            />
-            {cityHasError && (
-              <p className={classes["error-text"]}>Please enter a city.</p>
-            )}
-          </div>
-          <div className={zipClasses}>
-            <label htmlFor='zip'> Zip</label>
-            <input
-              value={zipValue}
-              onChange={zipChangeHandler}
-              onBlur={zipBlurHandler}
-              id='zip'
-              type='zip'
-            />
-            {zipHasError && (
-              <p className={classes["error-text"]}>
-                Please enter a 5 digit postal code.
-              </p>
-            )}
-          </div>
-        </div>
 
-        <div className={classes.total}>
-          <span>Total Amount</span>
-          <span>{totalAmount}</span>
-        </div>
-        <div className={classes.actions}>
-          <button
-            type='button'
-            className={classes["button--alt"]}
-            onClick={props.onReturnToCart}>
-            Cart
-          </button>
-          <button
-            disabled={!formIsValid}
-            type='submit'
-            className={classes.button}>
-            Place Order
-          </button>
-        </div>
-        {isLoading && <p>Submitting...</p>}
-        {httpError && <p>An error has occured. Please try re-submitting.</p>}
-      </form>
+          <div className={classes.total}>
+            <span>Total Amount</span>
+            <span>{totalAmount}</span>
+          </div>
+          <div className={classes.actions}>
+            <button
+              type='button'
+              className={classes["button--alt"]}
+              onClick={props.onReturnToCart}>
+              Cart
+            </button>
+            <button
+              disabled={!formIsValid}
+              type='submit'
+              className={classes.button}>
+              Place Order
+            </button>
+          </div>
+          {isLoading && <p>Submitting...</p>}
+          {httpError && <p>An error has occured. Please try re-submitting.</p>}
+        </form>
+      </div>
     </Modal>
   );
 };

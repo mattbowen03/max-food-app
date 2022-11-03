@@ -45,6 +45,11 @@
   color: white;
 }
 
+.order-control {
+  max-height: 26rem;
+  overflow: scroll;
+}
+
 .form-control {
   margin-bottom: 1rem;
 }
@@ -132,4 +137,11 @@ button:disabled:active {
 
 .error-text {
   color: #b40e0e;
+}
+
+@media screen and (max-width: 425px) {
+  .form-control input,
+  .form-control select {
+    width: 100%;
+  }
 }

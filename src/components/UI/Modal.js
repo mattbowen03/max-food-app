@@ -25,7 +25,7 @@ const Modal = (props) => {
 
   useEffect(() => {
     disableBodyScroll(bodyRef, {
-      allowTouchMove: (el) => el.className === classes.modal,
+      allowTouchMove: (el) => el.className === "modal",
     });
 
     return () => {

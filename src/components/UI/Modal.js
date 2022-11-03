@@ -1,11 +1,6 @@
 import classes from "./Modal.module.css";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from "body-scroll-lock";
 
 const Backdrop = (props) => {
   return <div className={classes.backdrop} onClick={props.onClose}></div>;
@@ -23,26 +18,6 @@ const ModalOverlay = (props) => {
 const portalElement = document.getElementById("overlays");
 
 const Modal = (props) => {
-  const bodyRef = document.body;
-
-  useEffect(() => {
-    disableBodyScroll(bodyRef, {
-      allowTouchMove: (el) => {
-        while (el && el !== document.body) {
-          if (el.getAttribute("body-scroll-lock-ignore") !== null) {
-            return true;
-          }
-
-          el = el.parentElement;
-        }
-      },
-    });
-
-    return () => {
-      enableBodyScroll(bodyRef);
-      clearAllBodyScrollLocks();
-    };
-  }, [bodyRef]);
   return (
     <>
       {ReactDOM.createPortal(
